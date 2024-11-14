@@ -4,12 +4,26 @@ document.addEventListener("DOMContentLoaded", function () {
 	const inputText = document.getElementById("inputText");
 	const outputText = document.getElementById("outputText");
 
-	// Function to convert text by removing specific characters
+	// Function to convert text
 	function convertText() {
 		let text = inputText.value;
 
-		// Remove all '|' characters
-		text = text.replace(/\|/g, ""); // Global match for '|'
+		// Remove all '|' and '│' characters
+		text = text.replace(/\|/g, "");  // Remove '|'
+		text = text.replace(/│/g, "");   // Remove '│'
+
+		// Capture and reformat the date in YYYY/MM/DD and add a line break after
+		text = text.replace(/Date:\s*(\w+),\s*(\w+)\s*(\d{1,2}),\s*(\d{4})\s*at\s*\d{1,2}:\d{2}\s*[APM]*\s*/g, function (match, dayOfWeek, month, day, year) {
+			// Convert month to numerical format
+			const months = {
+				January: "01", February: "02", March: "03", April: "04",
+				May: "05", June: "06", July: "07", August: "08",
+				September: "09", October: "10", November: "11", December: "12"
+			};
+			const monthNumber = months[month];
+			const dayPadded = day.padStart(2, '0'); // Pad day with leading zero if needed
+			return `Date: ${year}/${monthNumber}/${dayPadded}\n`;
+		});
 
 		// Display the converted text
 		outputText.textContent = text;
