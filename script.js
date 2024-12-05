@@ -16,8 +16,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		text = text.replace(/[\u00A0\u200B\u202F]/g, ""); // Remove non-breaking space, zero-width space, and narrow no-break space
 		text = text.replace(/[^\x20-\x7E\r\n]/g, "");  // Remove all non-ASCII characters except line breaks
 
-		// Capture and reformat the date in YYYY/MM/DD and add a line break after
-		text = text.replace(/(?:Date|Sent):\s*(\w+),\s*(\w+)\s*(\d{1,2}),\s*(\d{4})\s*at\s*\d{1,2}:\d{2}\s*[APM]*\s*/g, function (match, prefix, month, day, year) {
+		// Reformat Date: and Sent: lines to YYYY/MM/DD
+		text = text.replace(/(?:Date|Sent):\s*(?:\w+,)?\s*(\w+)\s*(\d{1,2}),\s*(\d{4})(?:\s*at\s*\d{1,2}:\d{2}\s*[APM]*)?/g, function (match, month, day, year) {
 			// Convert month to numerical format
 			const months = {
 				January: "01", February: "02", March: "03", April: "04",
@@ -26,7 +26,9 @@ document.addEventListener("DOMContentLoaded", function () {
 			};
 			const monthNumber = months[month];
 			const dayPadded = day.padStart(2, '0'); // Pad day with leading zero if needed
-			return `${prefix}: ${year}/${monthNumber}/${dayPadded}\n`; // Preserve "Date" or "Sent"
+
+			// Return the reformatted Date or Sent line
+			return `${match.split(":")[0]}: ${year}/${monthNumber}/${dayPadded}`; // Keep the prefix (Date or Sent)
 		});
 
 		// Display the converted text
