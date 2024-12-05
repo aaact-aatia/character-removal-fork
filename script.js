@@ -12,9 +12,9 @@ document.addEventListener("DOMContentLoaded", function () {
 		text = text.replace(/\|/g, "");  // Remove '|'
 		text = text.replace(/│/g, "");   // Remove '│'
 
-		// Remove special/invisible characters
+		// Remove special/invisible characters but preserve line breaks
 		text = text.replace(/[\u00A0\u200B\u202F]/g, ""); // Remove non-breaking space, zero-width space, and narrow no-break space
-		text = text.replace(/[^\x20-\x7E]/g, "");  // Remove all non-ASCII characters (optional)
+		text = text.replace(/[^\x20-\x7E\r\n]/g, "");  // Remove all non-ASCII characters except line breaks
 
 		// Capture and reformat the date in YYYY/MM/DD and add a line break after
 		text = text.replace(/(?:Date|Sent):\s*(\w+),\s*(\w+)\s*(\d{1,2}),\s*(\d{4})\s*at\s*\d{1,2}:\d{2}\s*[APM]*\s*/g, function (match, prefix, month, day, year) {
